@@ -1,0 +1,25 @@
+.coronaGlyph {
+  position: relative;
+  display: inline-grid;
+  width: 1em;
+  height: 1em;
+  flex: 0 0 auto;
+  place-items: center;
+  margin: 0 0.025em;
+  vertical-align: -0.045em;
+  overflow: visible;
+  z-index: 2;
+}
+
+.coronaCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  transform: scale(var(--corona-scale, 1.85));
+  transform-origin: center center;
+  will-change: transform;
+}

@@ -1,0 +1,261 @@
+.section {
+  --scene-ink: var(--color-ink);
+  position: relative;
+  padding: clamp(6rem, 13vw, 12rem) 0 clamp(6rem, 13vw, 12rem);
+  overflow-x: clip;
+  background: var(--color-canvas);
+  color: var(--scene-ink);
+  z-index: 5;
+}
+
+.container {
+  width: min(100%, 90rem);
+  margin-inline: auto;
+  padding-inline: clamp(1.5rem, 8vw, 8rem);
+  position: relative;
+}
+
+.testimonialsTitle {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 0 0 4rem;
+  font-family: var(--font-display), var(--font-display-fallback);
+  font-size: clamp(3.75rem, 8.4vw, 7.5rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  pointer-events: none;
+}
+
+.titleA, .titleB { perspective: 2000px; white-space: nowrap; }
+.titleB { align-self: flex-end; }
+.char { display: inline-block; white-space: pre; transform-style: preserve-3d; }
+
+.testimonials {
+  position: relative;
+  perspective: 900px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  font-size: clamp(17px, 1.35vw, 21px);
+}
+
+.cardSlot { width: 100%; transform-origin: top left; }
+
+.card {
+  --card-ink: #faf8f4;
+  --card-muted: #b4b4b4;
+  position: relative;
+  display: grid;
+  grid-template-rows: 3.55em 9.25em minmax(0, 1fr);
+  width: 100%;
+  max-width: 25em;
+  height: 18.5em;
+  margin-inline: auto;
+  overflow: hidden;
+  container-type: inline-size;
+  border-radius: 12px;
+  background: #111;
+  color: var(--card-ink);
+  box-shadow: 0 18px 42px -24px rgba(11, 11, 11, 0.36);
+  font-family: var(--font-body);
+}
+
+.card[data-state="transition"] {
+  --card-ink: var(--color-ink);
+  --card-muted: var(--color-muted-ink);
+  background: var(--color-surface);
+}
+.card[data-state="resolved"] { background: #202020; }
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+  min-width: 0;
+  padding: 0.85em 1.2em 0.7em;
+}
+.cardHeader h3 {
+  min-width: 0;
+  margin: 0;
+  font-family: var(--font-display), var(--font-display-fallback);
+  font-size: clamp(1.3rem, 6cqi, 2rem);
+  line-height: 0.95;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+.stepNumber { flex-shrink: 0; font-size: 0.65em; font-variant-numeric: tabular-nums; }
+.stepNumber span { color: var(--card-muted); }
+
+.evidence {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  background: #050505;
+}
+.evidenceSource {
+  position: absolute;
+  width: 100%;
+  height: auto;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.evidenceSource > img { display: block; width: 100%; height: auto; }
+.evidenceBox {
+  position: absolute;
+  border: 1px solid var(--color-accent);
+}
+.evidenceLabel {
+  position: absolute;
+  right: 1.25em;
+  bottom: 1em;
+  color: #fff;
+  background: #111;
+  padding: 0.4em 0.6em;
+  font-size: 0.5em;
+  letter-spacing: 0.08em;
+}
+
+.correctionStage {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.85rem, 5cqi, 1.6rem);
+  overflow: hidden;
+}
+.rejectedGlyph, .glyphFrame {
+  font-family: var(--font-display), var(--font-display-fallback);
+  font-size: clamp(4rem, 24cqi, 7rem);
+  font-weight: 400;
+  line-height: 1;
+}
+.rejectedGlyph { position: relative; color: #85817c; }
+.rejectedGlyph::after {
+  content: "";
+  position: absolute;
+  height: 2px;
+  width: 120%;
+  left: -10%;
+  top: 49%;
+  transform: rotate(-32deg);
+  background: var(--color-accent);
+}
+.correctionArrow { width: clamp(1.7rem, 9cqi, 2.5rem); flex-shrink: 0; color: var(--color-ink); }
+.glyphFrame { position: relative; color: var(--color-ink); }
+.glyphFrame::after {
+  content: "";
+  position: absolute;
+  inset: 8% -16%;
+  border: 1px solid var(--color-accent);
+}
+.ocrSplitSlot { display: inline-grid; height: 1em; min-width: 0.6em; text-align: center; }
+.ocrSplitOld, .ocrSplitNew { grid-area: 1 / 1; }
+.ocrSplitOld { opacity: 0; }
+
+.resolvedStage {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25em;
+}
+.cardCrop {
+  position: relative;
+  width: min(14em, 78%);
+  aspect-ratio: 123 / 40;
+  overflow: hidden;
+  background: #111;
+  filter: grayscale(1);
+}
+.cardCropImage {
+  position: absolute;
+  width: calc(100% * 1086 / 123);
+  height: calc(100% * 1448 / 40);
+  left: calc(-100% * 860 / 123);
+  top: calc(-100% * 757 / 40);
+  object-fit: fill;
+  max-width: none;
+  display: block;
+}
+.verifiedMark { width: 2em; margin-left: 1em; color: var(--color-accent); flex-shrink: 0; }
+
+.readout {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1em;
+  min-width: 0;
+  padding: 0.85em 1.2em 1.05em;
+}
+.readoutMain { min-width: 0; }
+.readoutLabel { display: block; color: var(--card-muted); font-size: 0.5em; letter-spacing: 0.1em; margin-bottom: 0.8em; }
+.cardOcr {
+  display: flex;
+  align-items: baseline;
+  white-space: pre;
+  font-family: "Cascadia Mono", Consolas, monospace;
+  font-size: clamp(1.45rem, 8cqi, 2.15rem);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+.ocrErrorChar { color: var(--color-accent); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+.ocrResolvedChar { color: var(--card-ink); }
+.reviewCaption {
+  margin: 0;
+  font-size: clamp(1.25rem, 6cqi, 1.65rem);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+.cardNote {
+  flex: 0 0 auto;
+  max-width: 16ch;
+  margin: 0 0 0.15em;
+  color: var(--card-muted);
+  font-size: clamp(0.64rem, 2.35cqi, 0.78rem);
+  line-height: 1.35;
+  text-align: right;
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .testimonialsTitle { position: sticky; top: 25svh; flex-direction: row; margin-bottom: 0; }
+  .titleB { margin-top: 0.65em; }
+  .testimonials { height: 72em; gap: 0; }
+  .cardSlot { position: absolute; will-change: transform; }
+  .card { margin: 0; transform: translate(-50%, -50%); }
+}
+
+@media (min-width: 480px) and (max-width: 1023px) {
+  .section { padding-block: clamp(6rem, 14vw, 10rem); }
+  .container { padding-inline: clamp(2rem, 7vw, 5rem); }
+  .testimonialsTitle {
+    max-width: 48rem;
+    margin: 0 auto clamp(4rem, 10vw, 7rem);
+    font-size: clamp(4.5rem, 12vw, 7rem);
+  }
+  .testimonials { gap: clamp(3rem, 8vw, 5rem); font-size: clamp(17px, 2.3vw, 20px); }
+}
+
+@media (max-width: 479px) {
+  .container { padding-inline: 1.25rem; }
+  .testimonialsTitle { margin-bottom: 3rem; font-size: clamp(3.5rem, 17vw, 5rem); }
+  .testimonials { font-size: 16px; gap: 2.5rem; }
+  .card { height: 20em; grid-template-rows: 3.7em 9em minmax(0, 1fr); }
+  .cardHeader h3 { font-size: clamp(1.2rem, 6cqi, 1.45rem); }
+  .readout { gap: 0.75rem; }
+  .cardNote { max-width: 13ch; }
+  .readoutLabel, .evidenceLabel { font-size: 0.65em; }
+  .stepNumber { font-size: 0.8em; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .testimonialsTitle { max-width: 36rem; margin-inline: auto; }
+  .ocrSplitOld { display: none; }
+}

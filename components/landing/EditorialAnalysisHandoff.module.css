@@ -1,0 +1,43 @@
+.sequence {
+  position: relative;
+}
+
+.bridge {
+  position: fixed;
+  z-index: 6;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  will-change: transform;
+}
+
+.bridgeLine {
+  position: absolute;
+  bottom: 0;
+  left: -1px;
+  width: 2px;
+  background: var(--color-accent);
+  transform: scaleY(0);
+  transform-origin: 50% 100%;
+  will-change: transform;
+}
+
+.bridgeDot {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+@media (max-width: 47.99rem), (prefers-reduced-motion: reduce) {
+  .bridge {
+    display: none;
+  }
+}

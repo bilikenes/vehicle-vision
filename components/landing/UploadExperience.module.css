@@ -1,0 +1,447 @@
+.section {
+  position: relative;
+  z-index: 4;
+  min-height: 178svh;
+  scroll-margin-top: 0;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}
+
+.scene {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100svh;
+  min-height: 42rem;
+}
+
+.sampleField {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.sampleSlot {
+  position: absolute;
+  z-index: 1;
+  top: var(--sample-y);
+  left: var(--sample-x);
+  width: clamp(6.8rem, var(--sample-width), 11.25rem);
+  opacity: 0;
+  pointer-events: auto;
+  will-change: transform, opacity;
+}
+
+.sampleButton {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: clamp(0.8rem, 1vw, 1.1rem);
+  background: #dedbd4;
+  cursor: pointer;
+  transform: translateZ(0) scale(1);
+  transition:
+    transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sampleButton::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  border: 1px solid transparent;
+  border-radius: inherit;
+  pointer-events: none;
+  transition: border-color 220ms ease;
+}
+
+.sampleButton:hover {
+  filter: contrast(1.04);
+  transform: translateZ(0) scale(1.025);
+}
+
+.sampleButton[data-selected="true"]::after {
+  border-color: color-mix(in srgb, var(--color-accent) 78%, white 22%);
+}
+
+.sampleMedia,
+.sampleMedia img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.sampleMedia img {
+  object-fit: cover;
+  user-select: none;
+}
+
+.selectedMark {
+  position: absolute;
+  z-index: 2;
+  top: 0.6rem;
+  right: 0.6rem;
+  width: 0.34rem;
+  height: 0.34rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+  opacity: 0;
+  transform: scale(0.5);
+  transition:
+    opacity 220ms ease,
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sampleButton[data-selected="true"] .selectedMark {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.center {
+  position: absolute;
+  z-index: 5;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  width: min(34vw, 30rem);
+  min-width: 24rem;
+  flex-direction: column;
+  align-items: center;
+  transform: translate(-50%, -50%);
+  will-change: transform, opacity;
+}
+
+.copy {
+  width: 100%;
+  margin-bottom: clamp(1.6rem, 3svh, 2.7rem);
+  text-align: center;
+}
+
+.copy p,
+.copy h2 {
+  margin: 0;
+}
+
+.kicker {
+  margin-bottom: 0.85rem !important;
+  color: var(--color-ink);
+  font-family: var(--font-display), var(--font-display-fallback);
+  font-size: clamp(2.2rem, 3.2vw, 4rem);
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+}
+
+.copy h2 {
+  color: color-mix(in srgb, var(--color-ink) 48%, transparent);
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1.45;
+}
+
+.aperture {
+  position: relative;
+  display: grid;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 0.4rem;
+  background: color-mix(in srgb, var(--color-surface) 58%, var(--color-canvas));
+  cursor: pointer;
+  transition:
+    background 260ms ease,
+    box-shadow 260ms ease;
+}
+
+.aperture:hover,
+.aperture[data-drag-active="true"] {
+  background: color-mix(in srgb, var(--color-surface) 82%, var(--color-canvas));
+}
+
+.aperture[data-selected="true"] {
+  background: #e4e0d8;
+}
+
+.corner {
+  position: absolute;
+  z-index: 3;
+  width: 1rem;
+  height: 1rem;
+  border-color: color-mix(in srgb, var(--color-ink) 22%, transparent);
+  opacity: 0.38;
+  transition:
+    width 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    height 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 220ms ease,
+    opacity 220ms ease,
+    transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cornerTopLeft {
+  top: 0.72rem;
+  left: 0.72rem;
+  border-top: 1px solid;
+  border-left: 1px solid;
+}
+
+.cornerTopRight {
+  top: 0.72rem;
+  right: 0.72rem;
+  border-top: 1px solid;
+  border-right: 1px solid;
+}
+
+.cornerBottomLeft {
+  bottom: 0.72rem;
+  left: 0.72rem;
+  border-bottom: 1px solid;
+  border-left: 1px solid;
+}
+
+.cornerBottomRight {
+  right: 0.72rem;
+  bottom: 0.72rem;
+  border-right: 1px solid;
+  border-bottom: 1px solid;
+}
+
+.aperture:hover .corner,
+.aperture:focus-visible .corner {
+  width: 1.2rem;
+  height: 1.2rem;
+  border-color: color-mix(in srgb, var(--color-ink) 42%, transparent);
+  opacity: 0.72;
+}
+
+.aperture[data-drag-active="true"] .corner {
+  width: 1.35rem;
+  height: 1.35rem;
+  border-color: var(--color-accent);
+  opacity: 1;
+}
+
+.cornerTopLeft,
+.aperture[data-drag-active="true"] .cornerTopLeft {
+  transform-origin: top left;
+}
+
+.cornerTopRight,
+.aperture[data-drag-active="true"] .cornerTopRight {
+  transform-origin: top right;
+}
+
+.cornerBottomLeft,
+.aperture[data-drag-active="true"] .cornerBottomLeft {
+  transform-origin: bottom left;
+}
+
+.cornerBottomRight,
+.aperture[data-drag-active="true"] .cornerBottomRight {
+  transform-origin: bottom right;
+}
+
+.aperture[data-drag-active="true"] .cornerTopLeft {
+  transform: translate(-3px, -3px);
+}
+
+.aperture[data-drag-active="true"] .cornerTopRight {
+  transform: translate(3px, -3px);
+}
+
+.aperture[data-drag-active="true"] .cornerBottomLeft {
+  transform: translate(-3px, 3px);
+}
+
+.aperture[data-drag-active="true"] .cornerBottomRight {
+  transform: translate(3px, 3px);
+}
+
+.plus {
+  color: color-mix(in srgb, var(--color-ink) 56%, transparent);
+  font-family: var(--font-body);
+  font-size: 1.2rem;
+  font-weight: 300;
+  line-height: 1;
+  transition:
+    color 220ms ease,
+    transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.aperture:hover .plus {
+  color: var(--color-accent);
+  transform: scale(1.08);
+}
+
+.dropLabel {
+  color: var(--color-accent);
+  font-size: 0.67rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+
+.preview {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.actions {
+  display: flex;
+  min-height: 2.7rem;
+  margin-top: 1.2rem;
+  align-items: center;
+  justify-content: center;
+  gap: 2.2rem;
+}
+
+.actions button {
+  padding: 0.45rem 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+}
+
+.chooseAction {
+  color: var(--color-accent);
+  transition: opacity 200ms ease;
+}
+
+.chooseAction:hover {
+  opacity: 0.82;
+}
+
+.changeAction {
+  color: color-mix(in srgb, var(--color-ink) 58%, transparent);
+  transition: color 200ms ease;
+}
+
+.changeAction:hover {
+  color: var(--color-ink);
+}
+
+.analyzeAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--color-ink);
+}
+
+.actionDot {
+  display: block;
+  width: 0.38rem;
+  height: 0.38rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.analyzeAction:hover .actionDot {
+  transform: translateX(3px);
+}
+
+.fileInput,
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 74rem) and (min-width: 48rem) {
+  .center {
+    width: min(38vw, 27rem);
+    min-width: 21rem;
+  }
+
+  .kicker {
+    font-size: clamp(2.15rem, 3.5vw, 3.25rem);
+  }
+}
+
+@media (max-width: 47.99rem) {
+  .section {
+    min-height: auto;
+    padding: 7rem 1.25rem 6rem;
+  }
+
+  .scene {
+    position: relative;
+    height: auto;
+    min-height: 0;
+  }
+
+  .center {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    min-width: 0;
+    transform: none;
+  }
+
+  .copy {
+    margin-bottom: 2rem;
+  }
+
+  .kicker {
+    font-size: clamp(2.6rem, 11vw, 4rem);
+  }
+
+  .aperture {
+    width: min(100%, 31rem);
+  }
+
+  .sampleField {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem;
+    margin-top: 4rem;
+  }
+
+  .sampleSlot {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    opacity: 1;
+  }
+
+  .sampleButton {
+    border-radius: 0.8rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sampleSlot,
+  .center {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .sampleButton,
+  .selectedMark,
+  .corner,
+  .plus,
+  .actionDot {
+    transition: none;
+  }
+}

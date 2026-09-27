@@ -1,0 +1,244 @@
+.section {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: clamp(5rem, 12vh, 9.5rem) var(--space-page-inline)
+    clamp(6rem, 14vh, 11rem);
+  background-color: var(--color-canvas);
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  max-width: 90rem;
+  margin-inline: auto;
+}
+
+.statement {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  color: var(--color-ink);
+  font-family: var(--font-display), var(--font-display-fallback);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 0.92;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3.5rem, 8vh, 7rem);
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.25rem, 0.8svh, 0.75rem);
+}
+
+.firstBlock {
+  align-items: flex-start;
+}
+
+.secondBlock {
+  align-items: flex-end;
+  text-align: right;
+  margin-left: auto;
+}
+
+.lineMask {
+  display: block;
+  overflow: visible;
+  will-change: transform;
+}
+
+.lineTwoMask {
+  overflow: visible;
+}
+
+.lineInk {
+  display: inline-flex;
+  align-items: baseline;
+  white-space: nowrap;
+}
+
+.revealChar {
+  display: inline-block;
+  color: var(--color-ink);
+  line-height: inherit;
+  vertical-align: baseline;
+}
+
+.lineOne {
+  font-size: clamp(5rem, 8.3vw, 9.5rem);
+}
+
+.lineTwo {
+  margin-left: clamp(2rem, 6vw, 7rem);
+  font-size: clamp(4rem, 7vw, 8.25rem);
+}
+
+.lineThree {
+  margin-right: clamp(2.5rem, 6.5vw, 7.5rem);
+  font-size: clamp(4.75rem, 7.7vw, 9rem);
+}
+
+.lineFour {
+  font-size: clamp(4.25rem, 7.1vw, 8.4rem);
+}
+
+.wheelGlyph {
+  display: inline-grid;
+  width: 0.79em;
+  height: 0.79em;
+  flex: 0 0 auto;
+  place-items: center;
+  margin: 0 0.025em;
+  color: currentColor;
+  vertical-align: -0.045em;
+}
+
+.wheelRotor {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0.075em solid currentColor;
+  border-radius: 50%;
+}
+
+.wheelGlyph[data-spinning="true"] .wheelRotor {
+  animation: wheelRotation 3.4s linear infinite;
+  will-change: transform;
+}
+
+.wheelHub {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  width: 0.2em;
+  height: 0.2em;
+  border: 0.045em solid currentColor;
+  border-radius: 50%;
+  background: var(--color-canvas);
+  transform: translate(-50%, -50%);
+}
+
+.wheelSpoke {
+  position: absolute;
+  top: 14%;
+  left: 50%;
+  width: 0.035em;
+  height: 72%;
+  border-radius: 999px;
+  background: currentColor;
+  transform-origin: center;
+}
+
+.spokeZero {
+  transform: translateX(-50%);
+}
+
+.spokeFortyFive {
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.spokeNinety {
+  transform: translateX(-50%) rotate(90deg);
+}
+
+.spokeOneThirtyFive {
+  transform: translateX(-50%) rotate(135deg);
+}
+
+@keyframes wheelRotation {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .wheelGlyph[data-spinning="true"]:hover .wheelRotor {
+    animation-duration: 2.7s;
+  }
+}
+
+@media (max-width: 63.99rem) {
+  .section {
+    padding: clamp(4rem, 8vh, 7rem) var(--space-page-inline);
+  }
+
+  .statement {
+    gap: clamp(2.5rem, 5vh, 4.5rem);
+  }
+
+  .lineOne {
+    font-size: clamp(4.4rem, 9vw, 7rem);
+  }
+
+  .lineTwo {
+    margin-left: clamp(1.5rem, 4vw, 3rem);
+    font-size: clamp(3.6rem, 7.7vw, 6rem);
+  }
+
+  .lineThree {
+    margin-right: clamp(1.5rem, 4vw, 3.5rem);
+    font-size: clamp(4rem, 8.4vw, 6.5rem);
+  }
+
+  .lineFour {
+    font-size: clamp(3.7rem, 7.8vw, 6rem);
+  }
+}
+
+@media (max-width: 47.99rem) {
+  .section {
+    padding: 4.5rem 1rem 5rem;
+  }
+
+  .statement {
+    gap: 2.5rem;
+  }
+
+  .secondBlock {
+    align-items: flex-start;
+    text-align: left;
+    margin-left: 0;
+  }
+
+  .lineOne,
+  .lineThree {
+    font-size: clamp(2.8rem, 12vw, 5.2rem);
+  }
+
+  .lineTwo,
+  .lineFour {
+    font-size: clamp(2.1rem, 9vw, 4rem);
+  }
+
+  .lineTwo {
+    margin-left: clamp(1rem, 5vw, 2.5rem);
+  }
+
+  .lineThree {
+    margin-right: 0;
+    margin-left: clamp(1.5rem, 7vw, 3rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lineInk {
+    color: var(--color-ink) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+  }
+
+  .revealChar {
+    color: var(--color-ink) !important;
+  }
+
+  .wheelRotor {
+    animation: none;
+  }
+}
