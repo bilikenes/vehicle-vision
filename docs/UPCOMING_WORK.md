@@ -3,6 +3,7 @@
 **Amaç:** Landing page için daha sonra uygulanacak UX, interaction ve görsel kalite iyileştirmelerini kısa bir çalışma notu olarak toplamak.
 
 **Tarih:** 2026-09-09
+**Son güncelleme:** 2026-09-30
 **Durum:** Yapılacaklar
 
 ## Hero ve navigation bar
@@ -15,7 +16,8 @@
 
 ## Mobil görünüm
 
-- [ ] Mobil görünüm iyileştirilecek; özellikle Section 02'den başlayarak tüm section'larda içerik, typography, spacing, scroll deneyimi ve etkileşimler mobil ekranlarda iyi çalışacak şekilde düzenlenecek.
+- [ ] Mobil görünüm genel olarak yeniden ele alınacak; tüm section'larda layout, typography, spacing, görsel ölçekleme/kırpma, scroll deneyimi ve etkileşimler farklı mobil viewportlarda net ve tutarlı çalışacak şekilde düzenlenecek.
+- [ ] Mobil kabul yalnızca tek tek section düzeltmeleriyle sınırlı kalmayacak; landing page baştan sona gerçek mobil akış olarak kontrol edilip taşma, hizalama, okunabilirlik, dokunma alanları ve scroll/motion problemleri giderilecek.
 
 ## Section 02
 
@@ -30,7 +32,14 @@
 
 ## Section 04
 
-- Resim yüklendikten sonra arka plandaki dosya yükleme alanı görünmeyecek; upload alanı başarılı yükleme sonrasında gizlenecek veya uygun biçimde değiştirilecek.
+- [ ] `YOUR TURN` alanında dosya/resim seçildikten sonra mevcut dosya yükleme arayüzü görünmeyecek. Seçilen görsel, upload aperture'ının en-boy oranına zorlanıp kötü bir kompozisyon oluşturmadan bağımsız ve temiz bir sunuma geçirilecek; gerekirse yükleme sonrası durum için farklı bir tasarım hazırlanacak.
+
+## Footer
+
+- [ ] LinkedIn, GitHub ve X sosyal medya butonları gerçek hesaplara bağlanacak; kullanılacak hesap bilgileri kullanıcıdan alınacak.
+- [ ] `Platform` başlığı altındaki tüm bağlantılar gözden geçirilecek ve gerçekten temsil ettikleri sayfa bölümü veya içeriğe yönlendirilecek; mevcut placeholder ve yanlış anchor'lar kaldırılacak.
+- [ ] Footer'daki iletişim e-posta adresleri gerçek adreslerle düzeltilecek; kullanılacak adresler kullanıcıdan alınacak.
+- [ ] `Privacy Policy`, `Terms of Service` ve `Security Architecture` için gerçek içerik ve sayfalar hazırlanacak. Benzer ürün/saaS sitelerindeki yapı ve kapsam araştırılarak Vehicle Vision'a uyarlanacak ve footer bağlantıları bu sayfalara bağlanacak.
 
 ## Section 05
 
@@ -43,5 +52,6 @@
 ## Referanslar
 
 - Kaynak: Kullanıcı tarafından 2026-09-09 tarihinde iletilen yapılacaklar notu.
+- Kaynak: Kullanıcı tarafından 2026-09-30 tarihinde iletilen yapılacaklar güncellemesi.
 
 **Codex**

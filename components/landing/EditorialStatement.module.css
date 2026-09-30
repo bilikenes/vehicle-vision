@@ -193,11 +193,15 @@
 
 @media (max-width: 47.99rem) {
   .section {
-    padding: 4.5rem 1rem 5rem;
+    padding: clamp(4.5rem, 13svh, 6.5rem) 1rem clamp(5.5rem, 15svh, 7.5rem);
   }
 
   .statement {
-    gap: 2.5rem;
+    gap: clamp(2.75rem, 9svh, 4rem);
+  }
+
+  .block {
+    gap: 0.5rem;
   }
 
   .secondBlock {
@@ -217,12 +221,33 @@
   }
 
   .lineTwo {
-    margin-left: clamp(1rem, 5vw, 2.5rem);
+    margin-left: clamp(0.75rem, 4vw, 1.75rem);
   }
 
   .lineThree {
     margin-right: 0;
-    margin-left: clamp(1.5rem, 7vw, 3rem);
+    margin-left: clamp(1rem, 5vw, 2rem);
+  }
+}
+
+@media (max-width: 23rem) {
+  .section {
+    padding-inline: 0.85rem;
+  }
+
+  .lineOne,
+  .lineThree {
+    font-size: 2.65rem;
+  }
+
+  .lineTwo,
+  .lineFour {
+    font-size: 1.95rem;
+  }
+
+  .lineTwo,
+  .lineThree {
+    margin-left: 0.5rem;
   }
 }
 

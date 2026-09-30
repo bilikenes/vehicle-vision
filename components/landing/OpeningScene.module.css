@@ -236,7 +236,7 @@
 }
 
 .menuThumb[data-thumb="1"] {
-  background: url("/media/temporary/hero-poster.jpg") center / cover;
+  background: url("/media/navigation/nav-home.webp") center / cover;
 }
 
 .menuThumb[data-thumb="2"] {

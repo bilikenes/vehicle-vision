@@ -52,40 +52,49 @@ export function Footer() {
     gsap.registerPlugin(ScrollTrigger);
 
     const context = gsap.context(() => {
-      const reducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
+      const mm = gsap.matchMedia();
 
-      if (reducedMotion) {
-        gsap.set(surface, { y: 0 });
-        gsap.set(content, { opacity: 1 });
-        return;
-      }
+      mm.add(
+        "(min-width: 768px) and (prefers-reduced-motion: no-preference)",
+        () => {
+          const updateFromProgress = (progress: number) => {
+            const y = gsap.utils.interpolate(
+              footerMotion.entry.offsetYPx,
+              0,
+              progress,
+            );
+            const opacity = gsap.utils.clamp(
+              0,
+              1,
+              (progress - footerMotion.entry.contentRevealStart) /
+                (1 - footerMotion.entry.contentRevealStart),
+            );
 
-      const updateFromProgress = (progress: number) => {
-        const y = gsap.utils.interpolate(
-          footerMotion.entry.offsetYPx,
-          0,
-          progress,
-        );
-        const opacity = gsap.utils.clamp(
-          0,
-          1,
-          (progress - footerMotion.entry.contentRevealStart) /
-            (1 - footerMotion.entry.contentRevealStart),
-        );
+            gsap.set(surface, { y });
+            gsap.set(content, { opacity });
+          };
 
-        gsap.set(surface, { y });
-        gsap.set(content, { opacity });
-      };
+          updateFromProgress(0);
+          const trigger = ScrollTrigger.create({
+            trigger: footer,
+            start: footerMotion.entry.start,
+            end: footerMotion.entry.end,
+            onUpdate: (self) => updateFromProgress(self.progress),
+          });
 
-      updateFromProgress(0);
-      ScrollTrigger.create({
-        trigger: footer,
-        start: footerMotion.entry.start,
-        end: footerMotion.entry.end,
-        onUpdate: (self) => updateFromProgress(self.progress),
-      });
+          return () => trigger.kill();
+        },
+      );
+
+      mm.add(
+        "(max-width: 767px), (prefers-reduced-motion: reduce)",
+        () => {
+          gsap.set(surface, { y: 0 });
+          gsap.set(content, { opacity: 1 });
+        },
+      );
+
+      return () => mm.revert();
     }, footer);
 
     ScrollTrigger.refresh();

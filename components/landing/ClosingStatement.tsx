@@ -20,23 +20,26 @@ export function ClosingStatement() {
     gsap.registerPlugin(ScrollTrigger);
     const mm = gsap.matchMedia();
 
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
-      const travel = () => Math.max(0, text.scrollWidth - container.offsetWidth);
+    mm.add(
+      "(min-width: 768px) and (prefers-reduced-motion: no-preference)",
+      () => {
+        const travel = () => Math.max(0, text.scrollWidth - container.offsetWidth);
 
-      const tween = gsap.to(text, {
-        x: () => -travel(),
-        ease: "none",
-        scrollTrigger: {
-          trigger: section,
-          start: "bottom bottom",
-          end: "top 30%",
-          scrub: 1,
-          invalidateOnRefresh: true,
-        },
-      });
+        const tween = gsap.to(text, {
+          x: () => -travel(),
+          ease: "none",
+          scrollTrigger: {
+            trigger: section,
+            start: "bottom bottom",
+            end: "top 30%",
+            scrub: 1,
+            invalidateOnRefresh: true,
+          },
+        });
 
-      return () => tween.kill();
-    });
+        return () => tween.kill();
+      },
+    );
 
     return () => mm.revert();
   }, []);
