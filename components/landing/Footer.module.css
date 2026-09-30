@@ -1,0 +1,361 @@
+/* Waabi-Style Interactive Footer Styles */
+.footer {
+  position: relative;
+  width: 100%;
+  overflow: clip;
+  min-height: 620px;
+  background-color: #80031c;
+  color: #ffffff;
+  user-select: none;
+}
+
+.surface {
+  position: relative;
+  width: 100%;
+  min-height: 620px;
+  will-change: transform;
+}
+
+.backgroundLayer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.footer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 2;
+  height: clamp(6rem, 9vw, 9rem);
+  background: linear-gradient(
+    to bottom,
+    var(--color-canvas) 0%,
+    color-mix(in srgb, var(--color-canvas) 72%, transparent) 36%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.videoFallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  min-height: 620px;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 80px;
+  padding-bottom: 70px;
+  gap: 60px;
+}
+
+.container {
+  width: min(1234px, calc(100vw - 80px));
+  margin-inline: auto;
+}
+
+/* Top Row */
+.topRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+.leftColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 580px;
+  width: 100%;
+}
+
+.headline {
+  font-family: var(--font-display), var(--font-display-fallback);
+  font-size: clamp(34px, 4.2vw, 56px);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.paragraph {
+  font-family: var(--font-neue, "PP Neue Haas Grotesk", "Inter", sans-serif);
+  font-size: 15px;
+  line-height: 1.5;
+  letter-spacing: 0.015em;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+}
+
+.emailLinks {
+  margin-top: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.mailLink {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+.mailLink:hover {
+  color: #ffffff;
+}
+
+.mailLink:focus-visible,
+.navLink:focus-visible,
+.legalLink:focus-visible,
+.socialBtn:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 4px;
+}
+
+.divider {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 14px;
+}
+
+/* Nav Column */
+.navColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 200px;
+}
+
+.navTitle {
+  font-family: var(--font-neue, "PP Neue Haas Grotesk", "Inter", sans-serif);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+}
+
+.navList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.navLink {
+  font-family: var(--font-neue, "PP Neue Haas Grotesk", "Inter", sans-serif);
+  font-size: 18px;
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+  color: rgba(255, 255, 255, 0.95);
+  text-decoration: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  display: inline-block;
+}
+
+.navLink:hover {
+  opacity: 0.7;
+  transform: translateX(4px);
+}
+
+/* Social Buttons */
+.socialColumn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.socialBtn {
+  width: 50px;
+  height: 50px;
+  border-radius: 9999px;
+  background-color: #ffffff;
+  color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.25s ease,
+    background-color 0.2s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.socialBtn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  background-color: #ffffff;
+  color: #111111;
+}
+
+.socialBtn:active {
+  transform: scale(0.96);
+}
+
+/* Bottom Row */
+.bottomRow {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.legalColumn {
+  order: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.copyright {
+  font-family: var(--font-neue, "PP Neue Haas Grotesk", "Inter", sans-serif);
+  font-size: 12px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.legalLinks {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.legalLink {
+  font-family: var(--font-neue, "PP Neue Haas Grotesk", "Inter", sans-serif);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.legalLink:hover {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.wordmarkColumn {
+  order: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  max-width: 650px;
+  width: auto;
+}
+
+.wordmark {
+  font-family: var(--font-display), var(--font-display-fallback);
+  font-size: clamp(48px, 6.8vw, 104px);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  line-height: 0.85;
+  color: #ffffff;
+  white-space: nowrap;
+  user-select: none;
+  text-align: right;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 960px) {
+  .footer {
+    min-height: auto;
+  }
+
+  .surface {
+    min-height: auto;
+  }
+
+  .content {
+    min-height: auto;
+    padding-top: 60px;
+    padding-bottom: 40px;
+    gap: 48px;
+  }
+
+  .topRow {
+    flex-direction: column;
+    gap: 36px;
+  }
+
+  .leftColumn {
+    max-width: 100%;
+  }
+
+  .bottomRow {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  .legalColumn {
+    order: 2;
+  }
+
+  .wordmarkColumn {
+    order: 1;
+    justify-content: flex-start;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .wordmark {
+    font-size: clamp(36px, 9vw, 56px);
+    text-align: left;
+  }
+
+  .socialBtn {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .surface {
+    will-change: auto;
+  }
+
+  .mailLink,
+  .navLink,
+  .legalLink,
+  .socialBtn {
+    transition: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    width: calc(100vw - 40px);
+  }
+
+  .socialColumn {
+    gap: 10px;
+  }
+
+  .legalLinks {
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+}

@@ -239,18 +239,20 @@
   background: url("/media/temporary/hero-poster.jpg") center / cover;
 }
 
-.menuThumb[data-thumb="2"],
-.menuThumb[data-thumb="5"] {
-  background: linear-gradient(145deg, #bdb9ae, #ebe7de);
+.menuThumb[data-thumb="2"] {
+  background: url("/media/navigation/nav-our-vision.webp") center / cover;
 }
 
 .menuThumb[data-thumb="3"] {
-  background: repeating-radial-gradient(circle at center, #0b0b0b 0 1px, transparent 2px 6px), #d8d3ca;
+  background: url("/media/navigation/nav-analysis-pipeline.webp") center / cover;
 }
 
-.menuThumb[data-thumb="4"],
-.menuThumb[data-thumb="6"] {
-  background: linear-gradient(25deg, #252525 0 28%, #8e8a80 29% 58%, #dcd7ce 59%);
+.menuThumb[data-thumb="4"] {
+  background: url("/media/navigation/nav-try-it-now.webp") center / cover;
+}
+
+.menuThumb[data-thumb="5"] {
+  background: url("/media/navigation/nav-contact.webp") center / cover;
 }
 
 .menuItemLabel {
@@ -263,7 +265,7 @@
 
 a.menuItem:hover .menuItemLabel,
 a.menuItem:focus-visible .menuItemLabel,
-.menuItem:first-child .menuItemLabel {
+.menuItem[data-active="true"] .menuItemLabel {
   color: var(--color-accent);
 }
 

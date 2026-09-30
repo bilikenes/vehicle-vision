@@ -409,10 +409,9 @@ export function UploadExperience() {
                 key={sample.id}
                 className={styles.sampleSlot}
                 data-upload-sample
-                data-section04-retreat={sample.isSection05Source ? undefined : ""}
+                data-section04-retreat=""
                 data-side={sample.side}
                 data-carried-slot={sample.isSection03Source ? "" : undefined}
-                data-handoff-slot={sample.isSection05Source ? "" : undefined}
                 style={getSampleStyle(sample)}
               >
                 <button
@@ -422,18 +421,16 @@ export function UploadExperience() {
                   aria-label={`Use sample: ${sample.alt}`}
                   data-selected={selected ? "true" : "false"}
                   data-section04-carried-sample={sample.isSection03Source ? "" : undefined}
-                  data-section04-handoff-source={sample.isSection05Source ? "" : undefined}
                   onClick={() => selectSample(sample)}
                 >
                   <span
                     className={styles.sampleMedia}
                     data-section04-carried-media={sample.isSection03Source ? "" : undefined}
-                    data-section04-handoff-media={sample.isSection05Source ? "" : undefined}
                   >
                     <img
                       src={sample.src}
                       alt=""
-                      loading={sample.isSection03Source || sample.isSection05Source ? "eager" : "lazy"}
+                      loading={sample.isSection03Source ? "eager" : "lazy"}
                       draggable={false}
                       style={{ objectPosition: sample.objectPosition }}
                     />

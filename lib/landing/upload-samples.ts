@@ -9,7 +9,6 @@ export type UploadSample = Readonly<{
   parallaxY: number;
   objectPosition?: string;
   isSection03Source?: boolean;
-  isSection05Source?: boolean;
 }>;
 
 export const uploadSamples: readonly UploadSample[] = [
@@ -56,7 +55,6 @@ export const uploadSamples: readonly UploadSample[] = [
     widthVw: 8.3,
     parallaxY: 34,
     objectPosition: "50% 50%",
-    isSection05Source: true,
   },
   {
     id: "right-road-sedan",

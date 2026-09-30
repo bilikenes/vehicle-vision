@@ -141,29 +141,15 @@ export const uploadMotion = {
   },
 } as const;
 
-export const humanControlMotion = {
-  scrubSeconds: 0.8,
-  scrollDistanceVh: 240,
-  factors: {
-    card1: 1.35,
-    card2: 1.15,
-    card3: 0.95,
+export const footerMotion = {
+  entry: {
+    start: "top bottom",
+    end: "bottom bottom",
+    offsetYPx: -200,
+    contentRevealStart: 0.75,
   },
-  textFadeIn: {
-    duration: 0.5,
-    stagger: 0.035,
-    y: -12,
-    z: 25,
-    rotationX: 12,
-    ease: "power3.out",
-  },
-  textFadeOut: {
-    duration: 0.4,
-    stagger: 0.02,
-    y: -24,
-    z: 15,
-    rotationX: -10,
-    ease: "power3.in",
+  canvas: {
+    minWidthPx: 768,
   },
 } as const;
 
