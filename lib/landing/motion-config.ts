@@ -111,7 +111,7 @@ export const analysisMotion = {
   },
   stageThresholds: [0.37, 0.62, 0.86],
   mobile: {
-    spineIntroProgress: 0.012,
+    stageThresholds: [0.25, 0.5, 0.75],
   },
   desktop: {
     start: "top center",

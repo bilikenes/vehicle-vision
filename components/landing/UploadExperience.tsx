@@ -159,246 +159,281 @@ export function UploadExperience() {
 
     gsap.registerPlugin(ScrollTrigger);
 
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const desktop = window.matchMedia("(min-width: 768px)").matches;
-    const source = document.querySelector<HTMLElement>("[data-section03-handoff-source]");
-    const retreatNodes = Array.from(
-      document.querySelectorAll<HTMLElement>("[data-section03-retreat]"),
-    );
-    const sampleSlots = Array.from(
-      section.querySelectorAll<HTMLElement>("[data-upload-sample]"),
-    );
-    const carriedTarget = section.querySelector<HTMLElement>(
-      "[data-section04-carried-sample]",
-    );
-    const carriedMedia = section.querySelector<HTMLElement>(
-      "[data-section04-carried-media]",
-    );
+    const media = gsap.matchMedia();
 
-    if (!desktop || reducedMotion || !source || !carriedTarget || !carriedMedia) {
-      gsap.set(sampleSlots, { autoAlpha: 1, y: 0 });
-      gsap.set(center, { autoAlpha: 1, y: 0 });
-      gsap.set(carriedMedia, { autoAlpha: 1 });
-      return;
-    }
-
-    let clone: HTMLElement | null = null;
-    let sourceRect: RectSnapshot | null = null;
-    let targetRect: RectSnapshot | null = null;
-
-    const removeClone = () => {
-      clone?.remove();
-      clone = null;
-    };
-
-    const captureRects = () => {
-      const scene = sceneRef.current;
-      if (!scene) return;
-
-      const sourceBounds = source.getBoundingClientRect();
-      const targetBounds = carriedTarget.getBoundingClientRect();
-      const sceneBounds = scene.getBoundingClientRect();
-
-      const carriedSlot = carriedTarget.closest<HTMLElement>("[data-upload-sample]");
-      const slotY = carriedSlot ? Number(gsap.getProperty(carriedSlot, "y")) || 0 : 0;
-      const slotX = carriedSlot ? Number(gsap.getProperty(carriedSlot, "x")) || 0 : 0;
-
-      // Section 03'teki visualFrame, 100svh içinde tam dikey ortalanır.
-      // restingSourceTop hesabı hızlı scroll veya ters scroll esnasındaki anlık kaymaları önler.
-      const restingSourceTop = Math.round((window.innerHeight - sourceBounds.height) / 2);
-
-      sourceRect = {
-        left: sourceBounds.left,
-        top: restingSourceTop,
-        width: sourceBounds.width,
-        height: sourceBounds.height,
-      };
-      targetRect = {
-        left: targetBounds.left - slotX - sceneBounds.left,
-        top: targetBounds.top - slotY - sceneBounds.top,
-        width: targetBounds.width,
-        height: targetBounds.height,
-      };
-    };
-
-    const ensureClone = () => {
-      if (clone) return clone;
-
-      clone = source.cloneNode(true) as HTMLElement;
-      clone.querySelectorAll("[data-analysis-overlay]").forEach((node) => node.remove());
-      clone.removeAttribute("data-section03-handoff-source");
-      clone.setAttribute("aria-hidden", "true");
-      clone.style.position = "fixed";
-      clone.style.zIndex = "20";
-      clone.style.margin = "0";
-      clone.style.maxWidth = "none";
-      clone.style.pointerEvents = "none";
-      clone.style.willChange = "left, top, width, height, border-radius, opacity";
-
-      // Disable CSS transitions so GSAP has immediate 1:1 control with no lag
-      clone.style.transition = "none";
-      clone.querySelectorAll<HTMLElement>("*").forEach((node) => {
-        node.style.transition = "none";
+    const setupHandoff = (desktop: boolean) => {
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const source = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-section03-handoff-source]"),
+      ).find((candidate) => {
+        const bounds = candidate.getBoundingClientRect();
+        return bounds.width > 0 && bounds.height > 0;
       });
-
-      if (sourceRect) {
-        clone.style.left = `${sourceRect.left}px`;
-        clone.style.top = `${sourceRect.top}px`;
-        clone.style.width = `${sourceRect.width}px`;
-        clone.style.height = `${sourceRect.height}px`;
-      }
-      document.body.appendChild(clone);
-      gsap.set(clone, { autoAlpha: 1 });
-      return clone;
-    };
-
-    const resetBeforeHandoff = () => {
-      removeClone();
-      sourceRect = null;
-      targetRect = null;
-      gsap.set(source, { autoAlpha: 1 });
-      gsap.set(retreatNodes, { clearProps: "opacity,visibility,transform" });
-      gsap.set(sampleSlots, { autoAlpha: 0, y: 18 });
-      gsap.set(center, { autoAlpha: 0, y: 24 });
-      gsap.set(carriedMedia, { autoAlpha: 0 });
-    };
-
-    const settleHandoff = () => {
-      removeClone();
-      gsap.set(source, { autoAlpha: 0 });
-      gsap.set(retreatNodes, { autoAlpha: 0, y: -12 });
-      gsap.set(sampleSlots, { autoAlpha: 1, y: 0 });
-      gsap.set(center, { autoAlpha: 1, y: 0 });
-      gsap.set(carriedMedia, { autoAlpha: 1 });
-    };
-
-    const applyHandoffProgress = (progress: number) => {
-      const p = clamp(progress);
-
-      if (!sourceRect || !targetRect) captureRects();
-      if (!sourceRect || !targetRect) return;
-
-      const handoffClone = ensureClone();
-      gsap.set(source, { autoAlpha: 0 });
-
-      const retreatProgress = easeInOut(p / uploadMotion.handoff.uiRetreatEnd);
-      gsap.set(retreatNodes, {
-        autoAlpha: 1 - retreatProgress,
-        y: -12 * retreatProgress,
-      });
-
-      const travelProgress = easeInOut(
-        (p - uploadMotion.handoff.imageMoveStart) /
-          (0.96 - uploadMotion.handoff.imageMoveStart),
+      const retreatNodes = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-section03-retreat]"),
       );
-
-      // Smoothly zoom the internal source image from 1.04 down to 1.00 so it matches the resting slot
-      const currentScale = mix(1.04, 1, travelProgress);
-      const transformNode = handoffClone.querySelector<HTMLElement>(
-        "[class*='analysisSourceTransform']",
+      const sampleSlots = Array.from(
+        section.querySelectorAll<HTMLElement>("[data-upload-sample]"),
       );
-      if (transformNode) {
-        transformNode.style.transform = `scale(${currentScale})`;
-        transformNode.style.transformOrigin = "50% 50%";
+      const carriedTarget = section.querySelector<HTMLElement>(
+        "[data-section04-carried-sample]",
+      );
+      const carriedMedia = section.querySelector<HTMLElement>(
+        "[data-section04-carried-media]",
+      );
+      const sampleHint = section.querySelector<HTMLElement>(`.${styles.sampleHint}`);
+
+      if (reducedMotion || !source || !carriedTarget || !carriedMedia) {
+        gsap.set(sampleSlots, { autoAlpha: 1, y: 0 });
+        gsap.set(center, { autoAlpha: 1, y: 0 });
+        gsap.set(sampleHint, { autoAlpha: 1, y: 0 });
+        gsap.set(carriedMedia, { autoAlpha: 1 });
+        return;
       }
 
-      const targetRadius =
-        Number.parseFloat(getComputedStyle(carriedTarget).borderRadius) || 14;
+      let clone: HTMLElement | null = null;
+      let sourceRect: RectSnapshot | null = null;
+      let targetRect: RectSnapshot | null = null;
 
-      gsap.set(handoffClone, {
-        left: mix(sourceRect.left, targetRect.left, travelProgress),
-        top: mix(sourceRect.top, targetRect.top, travelProgress),
-        width: mix(sourceRect.width, targetRect.width, travelProgress),
-        height: mix(sourceRect.height, targetRect.height, travelProgress),
-        borderRadius: mix(22, targetRadius, travelProgress),
-      });
+      const removeClone = () => {
+        clone?.remove();
+        clone = null;
+      };
 
-      // Avoid double-image ghosting: the clone stays 100% visible throughout flight until it settles into targetRect.
-      // Once seated (p >= 0.98), swap cleanly: reveal the target image and hide the clone.
-      const isSeated = p >= 0.98;
-      gsap.set(carriedMedia, { autoAlpha: isSeated ? 1 : 0 });
-      gsap.set(handoffClone, { autoAlpha: isSeated ? 0 : 1 });
+      const captureRects = () => {
+        const scene = sceneRef.current;
+        if (!scene) return;
 
-      sampleSlots.forEach((slot, index) => {
-        const isCarried = slot.hasAttribute("data-carried-slot");
-        const revealStart = uploadMotion.samples.revealStart + index * 0.025;
-        const reveal = isCarried
-          ? clamp((p - 0.72) / 0.2)
-          : easeInOut((p - revealStart) / uploadMotion.samples.revealDuration);
-        gsap.set(slot, {
-          autoAlpha: reveal,
-          y: (1 - reveal) * uploadMotion.samples.revealOffsetPx,
+        const sourceBounds = source.getBoundingClientRect();
+        const targetBounds = carriedTarget.getBoundingClientRect();
+        const sectionBounds = section.getBoundingClientRect();
+
+        const carriedSlot = carriedTarget.closest<HTMLElement>("[data-upload-sample]");
+        const slotY = carriedSlot ? Number(gsap.getProperty(carriedSlot, "y")) || 0 : 0;
+        const slotX = carriedSlot ? Number(gsap.getProperty(carriedSlot, "x")) || 0 : 0;
+
+        // Section 03'teki visualFrame, 100svh içinde tam dikey ortalanır.
+        // Desktop dışındaki source, mobile sticky sahnesinin mevcut viewport konumunu korur.
+        const restingSourceTop = desktop
+          ? Math.round((window.innerHeight - sourceBounds.height) / 2)
+          : sourceBounds.top;
+
+        sourceRect = {
+          left: sourceBounds.left,
+          top: restingSourceTop,
+          width: sourceBounds.width,
+          height: sourceBounds.height,
+        };
+        targetRect = {
+          left: targetBounds.left - slotX - sectionBounds.left,
+          top: targetBounds.top - slotY - sectionBounds.top,
+          width: targetBounds.width,
+          height: targetBounds.height,
+        };
+      };
+
+      const ensureClone = () => {
+        if (clone) return clone;
+
+        clone = source.cloneNode(true) as HTMLElement;
+        clone.querySelectorAll("[data-analysis-overlay]").forEach((node) => node.remove());
+        clone.removeAttribute("data-section03-handoff-source");
+        clone.setAttribute("aria-hidden", "true");
+        clone.style.position = "fixed";
+        clone.style.zIndex = "20";
+        clone.style.margin = "0";
+        clone.style.maxWidth = "none";
+        clone.style.pointerEvents = "none";
+        clone.style.willChange = "left, top, width, height, border-radius, opacity";
+
+        // Disable CSS transitions so GSAP has immediate 1:1 control with no lag
+        clone.style.transition = "none";
+        clone.querySelectorAll<HTMLElement>("*").forEach((node) => {
+          node.style.transition = "none";
         });
-      });
 
-      const centerReveal = easeInOut(
-        (p - uploadMotion.center.revealStart) / uploadMotion.center.revealDuration,
-      );
-      gsap.set(center, {
-        autoAlpha: centerReveal,
-        y: (1 - centerReveal) * uploadMotion.center.revealOffsetPx,
-      });
+        if (sourceRect) {
+          clone.style.left = `${sourceRect.left}px`;
+          clone.style.top = `${sourceRect.top}px`;
+          clone.style.width = `${sourceRect.width}px`;
+          clone.style.height = `${sourceRect.height}px`;
+        }
+        document.body.appendChild(clone);
+        gsap.set(clone, { autoAlpha: 1 });
+        return clone;
+      };
+
+      const resetBeforeHandoff = () => {
+        removeClone();
+        sourceRect = null;
+        targetRect = null;
+        gsap.set(source, { autoAlpha: 1 });
+        gsap.set(retreatNodes, { clearProps: "opacity,visibility,transform" });
+        gsap.set(sampleSlots, { autoAlpha: 0, y: 18 });
+        gsap.set(center, { autoAlpha: 0, y: 24 });
+        gsap.set(sampleHint, { autoAlpha: 0, y: 12 });
+        gsap.set(carriedMedia, { autoAlpha: 0 });
+      };
+
+      const settleHandoff = () => {
+        removeClone();
+        gsap.set(source, { autoAlpha: 0 });
+        gsap.set(retreatNodes, { autoAlpha: 0, y: -12 });
+        gsap.set(sampleSlots, { autoAlpha: 1, y: 0 });
+        gsap.set(center, { autoAlpha: 1, y: 0 });
+        gsap.set(sampleHint, { autoAlpha: 1, y: 0 });
+        gsap.set(carriedMedia, { autoAlpha: 1 });
+      };
+
+      const applyHandoffProgress = (progress: number) => {
+        const p = clamp(progress);
+
+        if (!sourceRect || !targetRect) captureRects();
+        if (!sourceRect || !targetRect) return;
+
+        const handoffClone = ensureClone();
+        gsap.set(source, { autoAlpha: 0 });
+
+        const retreatProgress = easeInOut(p / uploadMotion.handoff.uiRetreatEnd);
+        gsap.set(retreatNodes, {
+          autoAlpha: 1 - retreatProgress,
+          y: -12 * retreatProgress,
+        });
+
+        const travelProgress = easeInOut(
+          (p - uploadMotion.handoff.imageMoveStart) /
+            (0.96 - uploadMotion.handoff.imageMoveStart),
+        );
+
+        // Smoothly zoom the internal source image from 1.04 down to 1.00 so it matches the resting slot
+        const currentScale = mix(1.04, 1, travelProgress);
+        const transformNode = handoffClone.querySelector<HTMLElement>(
+          "[class*='analysisSourceTransform']",
+        );
+        if (transformNode) {
+          transformNode.style.transform = `scale(${currentScale})`;
+          transformNode.style.transformOrigin = "50% 50%";
+        }
+
+        const targetRadius =
+          Number.parseFloat(getComputedStyle(carriedTarget).borderRadius) || 14;
+
+        gsap.set(handoffClone, {
+          left: mix(sourceRect.left, targetRect.left, travelProgress),
+          top: mix(sourceRect.top, targetRect.top, travelProgress),
+          width: mix(sourceRect.width, targetRect.width, travelProgress),
+          height: mix(sourceRect.height, targetRect.height, travelProgress),
+          borderRadius: mix(22, targetRadius, travelProgress),
+        });
+
+        // Avoid double-image ghosting: the clone stays 100% visible throughout flight until it settles into targetRect.
+        // Once seated (p >= 0.98), swap cleanly: reveal the target image and hide the clone.
+        const isSeated = p >= 0.98;
+        gsap.set(carriedMedia, { autoAlpha: isSeated ? 1 : 0 });
+        gsap.set(handoffClone, { autoAlpha: isSeated ? 0 : 1 });
+
+        sampleSlots.forEach((slot, index) => {
+          const isCarried = slot.hasAttribute("data-carried-slot");
+          const revealStart = uploadMotion.samples.revealStart + index * 0.025;
+          const reveal = isCarried
+            ? clamp((p - 0.72) / 0.2)
+            : easeInOut((p - revealStart) / uploadMotion.samples.revealDuration);
+          gsap.set(slot, {
+            autoAlpha: reveal,
+            y: (1 - reveal) * uploadMotion.samples.revealOffsetPx,
+          });
+        });
+
+        const centerReveal = easeInOut(
+          (p - uploadMotion.center.revealStart) / uploadMotion.center.revealDuration,
+        );
+        gsap.set(center, {
+          autoAlpha: centerReveal,
+          y: (1 - centerReveal) * uploadMotion.center.revealOffsetPx,
+        });
+        gsap.set(sampleHint, {
+          autoAlpha: centerReveal,
+          y: (1 - centerReveal) * 12,
+        });
+      };
+
+      const context = gsap.context(() => {
+        resetBeforeHandoff();
+
+        ScrollTrigger.create({
+          trigger: section,
+          start: uploadMotion.handoff.start,
+          end: uploadMotion.handoff.end,
+          scrub: uploadMotion.scrubSeconds,
+          invalidateOnRefresh: true,
+          onRefreshInit: () => {
+            sourceRect = null;
+            targetRect = null;
+          },
+          onRefresh: (self) => {
+            if (self.isActive) applyHandoffProgress(self.progress);
+          },
+          onEnter: () => {
+            captureRects();
+            applyHandoffProgress(0);
+          },
+          onEnterBack: (self) => {
+            applyHandoffProgress(self.progress);
+          },
+          onUpdate: (self) => applyHandoffProgress(self.progress),
+          onLeave: settleHandoff,
+          onLeaveBack: resetBeforeHandoff,
+        });
+
+        if (desktop) {
+          ScrollTrigger.create({
+            trigger: section,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: uploadMotion.scrubSeconds,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              sampleSlots.forEach((slot) => {
+                const distance = Number.parseFloat(
+                  getComputedStyle(slot).getPropertyValue("--sample-parallax"),
+                );
+                gsap.set(slot, { y: self.progress * -distance });
+              });
+              gsap.set(center, {
+                y: self.progress * uploadMotion.center.parallaxY,
+              });
+            },
+            onLeaveBack: () => {
+              sampleSlots.forEach((slot) => {
+                gsap.set(slot, { y: 0 });
+              });
+              gsap.set(center, { y: 0 });
+            },
+          });
+        }
+      }, section);
+
+      return () => {
+        removeClone();
+        gsap.set(source, { clearProps: "opacity,visibility" });
+        context.revert();
+      };
     };
 
-    const context = gsap.context(() => {
-      resetBeforeHandoff();
-
-      ScrollTrigger.create({
-        trigger: section,
-        start: uploadMotion.handoff.start,
-        end: uploadMotion.handoff.end,
-        scrub: uploadMotion.scrubSeconds,
-        invalidateOnRefresh: true,
-        onEnter: () => {
-          captureRects();
-          applyHandoffProgress(0);
-        },
-        onEnterBack: (self) => {
-          applyHandoffProgress(self.progress);
-        },
-        onUpdate: (self) => applyHandoffProgress(self.progress),
-        onLeave: settleHandoff,
-        onLeaveBack: resetBeforeHandoff,
-      });
-
-      ScrollTrigger.create({
-        trigger: section,
-        start: "top top",
-        end: "bottom bottom",
-        scrub: uploadMotion.scrubSeconds,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          sampleSlots.forEach((slot) => {
-            const distance = Number.parseFloat(
-              getComputedStyle(slot).getPropertyValue("--sample-parallax"),
-            );
-            gsap.set(slot, { y: self.progress * -distance });
-          });
-          gsap.set(center, {
-            y: self.progress * uploadMotion.center.parallaxY,
-          });
-        },
-        onLeaveBack: () => {
-          sampleSlots.forEach((slot) => {
-            gsap.set(slot, { y: 0 });
-          });
-          gsap.set(center, { y: 0 });
-        },
-      });
-    }, section);
-
+    media.add("(min-width: 768px)", () => setupHandoff(true));
+    media.add("(max-width: 767.99px)", () => setupHandoff(false));
     ScrollTrigger.refresh();
 
     return () => {
-      removeClone();
-      gsap.set(source, { clearProps: "opacity,visibility" });
-      context.revert();
+      media.revert();
+      ScrollTrigger.refresh();
     };
   }, []);
 
   return (
     <section ref={sectionRef} id="upload" className={styles.section} aria-labelledby="upload-title">
       <div ref={sceneRef} className={styles.scene}>
+        <p className={styles.sampleHint}>CHOOSE A SAMPLE</p>
         <div className={styles.sampleField} aria-label="Sample vehicle images">
           {uploadSamples.map((sample) => {
             const selected =

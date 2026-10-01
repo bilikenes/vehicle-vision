@@ -48,28 +48,28 @@ export const analysisStages: readonly AnalysisStage[] = [
 ] as const;
 
 export const analysisDemo = {
-  imageSrc: "/media/temporary/section03-sedan-source.png",
-  imageAlt: "Black sedan shown in a studio scene",
-  imageWidth: 1086,
-  imageHeight: 1448,
+  imageSrc: "/media/samples/sample-sedan.png",
+  imageAlt: "Dark gray sedan shown in a pink-lit studio",
+  imageWidth: 1122,
+  imageHeight: 1402,
   vehicleBBox: {
-    x: 29 / 1086,
-    y: 455 / 1448,
-    width: 988 / 1052,
-    height: 405 / 1370,
+    x: 46 / 1122,
+    y: 520 / 1402,
+    width: 1033 / 1122,
+    height: 513 / 1402,
   } satisfies NormalizedBBox,
   plateBBox: {
-    x: 860 / 1086,
-    y: 757 / 1448,
-    width: 123 / 1132,
-    height: 40 / 1448,
+    x: 759 / 1122,
+    y: 851 / 1402,
+    width: 177 / 1122,
+    height: 47 / 1402,
   } satisfies NormalizedBBox,
-  plateText: "34 MB 1881",
+  plateText: "06 DCC 821",
   bodyType: "SEDAN",
   visualFrames: {
     vehicle: { scale: 1, originX: 50, originY: 50 },
-    plate: { scale: 2.45, originX: 100.0902, originY: 53.5221 },
-    ocr: { scale: 2.7, originX: 100.0902, originY: 53.5221 },
+    plate: { scale: 2.45, originX: 84.6, originY: 68.3 },
+    ocr: { scale: 2.7, originX: 86.2, originY: 69.9 },
     body: { scale: 1.04, originX: 50, originY: 50 },
   } satisfies Record<AnalysisStageId, AnalysisVisualFrame>,
 } as const;

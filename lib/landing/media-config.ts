@@ -11,8 +11,8 @@ export type LandingMediaConfig = Readonly<{
 
 export const landingMedia = {
   heroVideo: {
-    src: "/media/hero/hero-video-scrub-3s.mp4",
-    posterSrc: "/media/hero/hero-video-poster.jpg",
+    src: "/media/hero/hero-video-luxury-car-scrub.mp4",
+    posterSrc: "/media/hero/hero-video-luxury-car-poster.jpg",
     kind: "final",
     mimeType: "video/mp4",
   },
