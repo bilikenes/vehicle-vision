@@ -5,6 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLayoutEffect, useRef } from "react";
 
 import styles from "./ClosingStatement.module.css";
+import { InfinityGlyph } from "./InfinityGlyph";
 
 export function ClosingStatement() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -54,8 +55,16 @@ export function ClosingStatement() {
       <div className={styles.paddingGlobal}>
         <div ref={containerRef} className={styles.containerLarge}>
           <div className={styles.textWrapper}>
-            <h2 ref={textRef} className={styles.text}>
-              Seen by the system. understood by you.
+            <h2
+              ref={textRef}
+              className={styles.text}
+              aria-label="Seen by the system. understood by you."
+            >
+              <span aria-hidden="true">Seen by the system. </span>
+              <span className={styles.word} aria-hidden="true">
+                underst<InfinityGlyph />d
+              </span>
+              <span aria-hidden="true"> by you.</span>
             </h2>
           </div>
         </div>
